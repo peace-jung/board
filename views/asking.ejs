@@ -1,69 +1,15 @@
-<!DOCTYPE html>
-<html lang="ko">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>QnA Board</title>
-
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
-    crossorigin="anonymous">
-
-</head>
-
-<body>
-
-  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #00669f;">
-    <a class="navbar-brand" href="/">QnA Board</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
-      aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a class="nav-item nav-link active" id="asking" href="/asking">질문하기</a>
-        <a class="nav-item nav-link" href="/signup">가입하기</a>
-        <a class="nav-item nav-link" href="/signout">로그아웃</a>
-      </div>
-    </div>
-  </nav>
-
-  <div class="wrapper" style="padding-top: 16px;">
-    <div class="container">
-      <h3>질문하기</h3>
-      <hr/>
-      <form method="POST" action="/asking">
-        <div class="form-group">
-          <label for="title">질문 제목</label>
-          <input type="text" class="form-control" name="title" id="title" />
-        </div>
-        <div class="form-group">
-          <label for="questionContext">질문 내용</label>
-          <textarea class="form-control" name="questionContext" id="questionContext" rows="15"></textarea>
-        </div>
-        <button class="btn btn-dark btn-sm" type="submit" style="margin-top: 10px;">질문등록</button>
-      </form>
-
-
-      <hr/>
-
-      <!-- footer -->
-      <footer>
-        <div class="">
-          Copyright © Peace Jung.
-        </div>
-      </footer>
-
-    </div>
+<h3>질문하기</h3>
+<hr/>
+<form method="POST" action="/asking">
+  <div class="form-group">
+    <label for="title">질문 제목</label>
+    <input type="text" class="form-control" name="title" id="title" />
   </div>
+  <div class="form-group">
+    <label for="questionContext">질문 내용</label>
+    <textarea class="form-control" name="questionContext" id="questionContext" rows="15"></textarea>
+  </div>
+  <button class="btn btn-dark btn-sm" type="submit" style="margin-top: 10px;">질문등록</button>
+</form>
 
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
-    crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
-    crossorigin="anonymous"></script>
-</body>
-
-</html>
+<hr/>

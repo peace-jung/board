@@ -4,18 +4,17 @@ const mongoose = require('mongoose');
 const users = require('./user');
 const boards = require('./board');
 
-mongoose.connect('mongodb://localhost:27017/board');
+mongoose.connect('mongodb://'+ process.env.IP +':27017/board');
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connect err'));
 db.once('open', function () {
-  console.log('connected');
+  console.log('mongo connected');
 });
 
 //메인 화면
 router.get('/', (req, res) => {
   boards.find({}, function (err, docs) {
     res.render('main', {
-      name: req.session.name,
       email: req.session.email ? req.session.email : 'undefined',
       answer: docs
     });
@@ -24,7 +23,8 @@ router.get('/', (req, res) => {
 
 //로그인 화면
 router.get('/signin', (req, res) => {
-  res.render('signin');
+  req.session.destroy();
+  res.render('signin', {email: 'undefined'});
 });
 
 //로그인 요청
@@ -33,12 +33,12 @@ router.post('/signin', (req, res) => {
   users.find(user, function (err, docs) {
     if (err) console.log(err);
     if (docs.length > 0) {
+      console.log(docs[0].email + '이 로그인함');
       req.session.name = docs[0].name;
       req.session.email = docs[0].email;
       res.redirect('/');
     } else {
-      console.log('사용자 없음');
-      res.redirect('/signin');
+      res.render('loginFail', {email: 'undefined'});
     }
   });
 });
@@ -52,7 +52,9 @@ router.get('/signout', (req, res) => {
 //회원가입 화면
 router.get('/signup', (req, res) => {
   req.session.destroy();
-  res.render('signup');
+  res.render('signup', {
+      email: 'undefined'
+    });
 });
 
 //회원가입 요청
@@ -69,10 +71,10 @@ router.post('/signup', (req, res) => {
       let user = new users(userInfo);
       user.save(function (err) {
         if (err) console.log(err);
-        else res.redirect('/signin');
+        else res.render('signupSuccess', { email: 'undefined' });
       });
     } else {
-      res.redirect('/signup');
+      res.render('signupFail', { email: 'undefined' });
     }
   });
 });
@@ -88,17 +90,17 @@ router.get('/asking', (req, res) => {
     });
 });
 
-//질문하기 요청
+//질문하기 등록 요청
 router.post('/asking', (req, res) => {
-  let re = /\r\n/g;
-  let context = req.body.questionContext.replace(re, '<br/>')
+/*  let re = /\r\n/g;
+  let context = req.body.questionContext.replace(re, '<br/>');*/
   let boardInfo = {
     email: req.session.email,
     name: req.session.name,
     title: req.body.title,
-    context: context,
+    context: req.body.questionContext,
   };
-  console.log(boardInfo.context);
+  console.log(boardInfo);
   let board = new boards(boardInfo);
   board.save(function (err) {
     if (err) console.log(err);
@@ -144,9 +146,8 @@ router.get('/answer/update', (req, res) => {
 
 //질문 수정
 router.post('/answer/:qnumber', (req, res) => {
-  console.log('object');
   let qnumber = req.params.qnumber;
-  let context = req.body.questionContext.replace(/\r\n/g, '<br/>');
+  //let context = req.body.questionContext.replace(/\r\n/g, '<br/>');
   boards.findById(qnumber, function (err, question) {
     if (err) return res.status(500).json({ error: 'db failure' });
     if (!question) res.status(404).json({ error: 'board not found' });
@@ -154,7 +155,7 @@ router.post('/answer/:qnumber', (req, res) => {
     question.email = req.session.email;
     question.name = req.session.name;
     question.title = req.body.title;
-    question.context = context;
+    question.context = req.body.questionContext;
 
     question.save(function (err) {
       if (err) return res.status(500).json({ error: 'db failure' });

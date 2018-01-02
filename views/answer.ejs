@@ -1,211 +1,159 @@
-<!DOCTYPE html>
-<html lang="ko">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>QnA Board</title>
-
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
-    crossorigin="anonymous">
-
-</head>
-
-<body>
-
-  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #00669f;">
-    <a class="navbar-brand" href="/">QnA Board</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
-      aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a class="nav-item nav-link" id="asking" href="/asking">질문하기</a>
-        <a class="nav-item nav-link" href="/signup">가입하기</a>
-        <% if(email == 'undefined') { %>
-          <a class="nav-item nav-link" href="/signin">로그인</a>
-          <% } else { %>
-            <a class="nav-item nav-link" href="/signout">로그아웃</a>
-            <% } %>
-      </div>
-    </div>
-  </nav>
-
-  <div class="wrapper" style="padding-top: 16px;">
-    <div class="container">
-      <div class="question">
-        <div class="d-flex w-100 justify-content-between">
-          <h3 class="mb-1">
-            <%= answer.title %>
-              <% if(answer.email == email) { %>
-                <button class="btn btn-outline-dark btn-sm qupdate" type="button">수정</button>
-                <button class="btn btn-outline-dark btn-sm qdelete" type="button">삭제</button>
-                <% } %>
-          </h3>
-          <div style="text-align: right;">
-            <small>
+<div class="question">
+  <div class="d-flex w-100 justify-content-between">
+    <h3 class="mb-1">
+      <%= answer.title %>
+        <% if(answer.email == email) { %>
+          <button class="btn btn-outline-dark btn-sm qupdate" type="button">수정</button>
+          <button class="btn btn-outline-dark btn-sm qdelete" type="button">삭제</button>
+          <% } %>
+    </h3>
+    <div style="text-align: right;">
+      <small>
               <%= answer.name %>
             </small>
-            <br/>
-            <small>
+      <br/>
+      <small>
               <%= answer.date.getFullYear() %>.
                 <%= answer.date.getMonth() + 1 %>.
                   <%= answer.date.getDate() %>
             </small>
-          </div>
-        </div>
-        <div style="border-top: 2px solid rgb(165, 165, 165);">
-          <br/>
-        </div>
+    </div>
+  </div>
+  <div style="border-top: 2px solid rgb(165, 165, 165);">
+    <br/>
+  </div>
 
-        <div class="qcontext">
-          <%- answer.context %>
-        </div>
-        <hr/>
+  <div class="qcontext">
+    <%= answer.context %>
+  </div>
+  <hr/>
+</div>
+
+<div class="answer">
+  <div class="d-flex w-100 justify-content-between">
+    <h3 class="mb-1">답변</h3>
+    <small class="answer-btn" style="cursor: pointer">답변달기</small>
+  </div>
+  <div style="border-top: 2px solid rgb(165, 165, 165);">
+    <br/>
+  </div>
+
+  <div class="answer-form">
+    <form>
+      <div class="form-group">
+        <label for="answerContext">답변하기</label>
+        <textarea class="form-control" name="answerContext" id="answerContext" rows="3" required></textarea>
+        <button class="btn btn-dark btn-sm submitBtn" type="button" style="margin-top: 10px;">답변등록</button>
       </div>
+    </form>
+    <hr/>
+  </div>
 
-      <div class="answer">
-        <div class="d-flex w-100 justify-content-between">
-          <h3 class="mb-1">답변</h3>
-          <small class="answer-btn" style="cursor: pointer">답변달기</small>
-        </div>
-        <div style="border-top: 2px solid rgb(165, 165, 165);">
-          <br/>
-        </div>
-
-        <div class="answer-form">
-          <form>
-            <div class="form-group">
-              <label for="answerContext">답변하기</label>
-              <textarea class="form-control" name="answerContext" id="answerContext" rows="3" required></textarea>
-              <button class="btn btn-dark btn-sm submitBtn" type="button" style="margin-top: 10px;">답변등록</button>
+  <div class="answers">
+    <div class="acontext">
+      <ul style="padding: 0; list-style: none;">
+        <% if(comments.length == 0) { %>
+          <div class="row" style="margin: 0;">
+            <div class="col-md-10">
+              <p>등록된 답변이 없습니다.</p>
             </div>
-          </form>
-          <hr/>
-        </div>
-
-        <div class="answers">
-          <div class="acontext">
-            <ul style="padding: 0; list-style: none;">
-              <% if(comments.length == 0) { %>
-                <div class="row" style="margin: 0;">
-                  <div class="col-md-10">
-                    <p>등록된 답변이 없습니다.</p>
-                  </div>
-                </div>
-                <% } else {
+          </div>
+          <% } else {
                 for(var i = 0, k = 0; i < comments.length; i++) { %>
-                  <li>
-                    <!-- 댓글 -->
-                    <div class="row" style=" margin: 0;">
-                      <div class="col-md-8" style="">
-                        <span class="answer-context<%=[i]%>">
+            <li>
+              <!-- 댓글 -->
+              <div class="row" style=" margin: 0;">
+                <div class="col-md-8" style="">
+                  <span class="answer-context<%=[i]%>">
                           <%= comments[i].context %>
                         </span>
 
-                      </div>
-                      <div class="col-md-2" style="">
-                        <button class="btn btn-outline-dark btn-sm recomment" type="button">답변</button>
-                        <% if(comments[i].email == email) { %>
-                          <button class="btn btn-outline-dark btn-sm cupdate" value="<%=i%>" id="<%=comments[i]._id%>" type="button">수정</button>
-                          <button class="btn btn-outline-dark btn-sm cdelete" id="<%=comments[i]._id%>" type="button">삭제</button>
-                          <% } %>
-                      </div>
-                      <div class="col-md-2" style="">
-                        <small>
+                </div>
+                <div class="col-md-2" style="">
+                  <button class="btn btn-outline-dark btn-sm recomment" type="button">답변</button>
+                  <% if(comments[i].email == email) { %>
+                    <button class="btn btn-outline-dark btn-sm cupdate" value="<%=i%>" id="<%=comments[i]._id%>" type="button">수정</button>
+                    <button class="btn btn-outline-dark btn-sm cdelete" id="<%=comments[i]._id%>" type="button">삭제</button>
+                    <% } %>
+                </div>
+                <div class="col-md-2" style="">
+                  <small>
                           <%= comments[i].name %>
                         </small>
-                        <br/>
-                        <% if(comments[i].email != '-') { %>
-                          <small>
+                  <br/>
+                  <% if(comments[i].email != '-') { %>
+                    <small>
                             <%= comments[i].date.getFullYear() %>.
                               <%= comments[i].date.getMonth() + 1 %>.
                                 <%= comments[i].date.getDate() %>
                           </small>
-                          <% } %>
-                      </div>
-                    </div>
+                    <% } %>
+                </div>
+              </div>
 
-                    <!-- 댓글의 댓글 -->
-                    <% for(var j = 0; j < comments[i].recomments.length; j++) { %>
-                      <hr/>
-                      <div class="row" style=" margin: 0;">
-                        <div class="col-md-8" style="padding-left: 30px;">
-                          └>
-                          <span class="reanswer-context<%=k%>">
+              <!-- 댓글의 댓글 -->
+              <% for(var j = 0; j < comments[i].recomments.length; j++) { %>
+                <hr/>
+                <div class="row" style=" margin: 0;">
+                  <div class="col-md-8" style="padding-left: 30px;">
+                    └>
+                    <span class="reanswer-context<%=k%>">
                             <%= comments[i].recomments[j].context %>
                           </span>
 
-                        </div>
-                        <div class="col-md-2" style="">
-                          <% if(comments[i].recomments[j].email == email) { %>
-                            <button class="btn btn-outline-dark btn-sm rupdate" value="<%=k++%>" id="<%=comments[i].recomments[j]._id%>" type="button">수정</button>
-                            <button class="btn btn-outline-dark btn-sm rdelete" id="<%=comments[i].recomments[j]._id%>" type="button">삭제</button>
-                            <% } %>
-                        </div>
-                        <div class="col-md-2" style="">
-                          <small>
+                  </div>
+                  <div class="col-md-2" style="">
+                    <% if(comments[i].recomments[j].email == email) { %>
+                      <button class="btn btn-outline-dark btn-sm rupdate" value="<%=k++%>" id="<%=comments[i].recomments[j]._id%>" type="button">수정</button>
+                      <button class="btn btn-outline-dark btn-sm rdelete" id="<%=comments[i].recomments[j]._id%>" type="button">삭제</button>
+                      <% } %>
+                  </div>
+                  <div class="col-md-2" style="">
+                    <small>
                             <%= comments[i].recomments[j].name %>
                           </small>
-                          <br/>
-                          <small>
+                    <br/>
+                    <small>
                             <%= comments[i].recomments[j].date.getFullYear() %>.
                               <%= comments[i].recomments[j].date.getMonth() + 1 %>.
                                 <%= comments[i].recomments[j].date.getDate() %>
                           </small>
+                  </div>
+                </div>
+                <% } %>
+
+                  <!-- 댓글에 댓글달기 -->
+                  <div class="row reAnswer reAnswer<%=i%>" style=" margin: 0;">
+                    <div class="col-md-12" style="">
+                      <form method="POST" action="/addReComment/<%=answer._id%>/<%=comments[i]._id%>">
+                        <div class="form-group">
+                          <label for="reAnswerContext">└> 답변하기</label>
+                          <textarea class="form-control" name="reAnswerContext" id="reAnswerContext" rows="3" required></textarea>
+                          <button class="btn btn-dark btn-sm submitBtn2" type="submit" style="margin-top: 10px;">답변등록</button>
                         </div>
-                      </div>
-                      <% } %>
-
-                        <!-- 댓글에 댓글달기 -->
-                        <div class="row reAnswer reAnswer<%=i%>" style=" margin: 0;">
-                          <div class="col-md-12" style="">
-                            <form method="POST" action="/addReComment/<%=answer._id%>/<%=comments[i]._id%>">
-                              <div class="form-group">
-                                <label for="reAnswerContext">└> 답변하기</label>
-                                <textarea class="form-control" name="reAnswerContext" id="reAnswerContext" rows="3" required></textarea>
-                                <button class="btn btn-dark btn-sm submitBtn2" type="submit" style="margin-top: 10px;">답변등록</button>
-                              </div>
-                            </form>
-                          </div>
-                        </div>
-                  </li>
-                  <hr/>
-                  <% }} %>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <!-- footer -->
-      <footer>
-        <div class="">
-          Copyright © Peace Jung.
-        </div>
-      </footer>
-
+                      </form>
+                    </div>
+                  </div>
+            </li>
+            <hr/>
+            <% }} %>
+      </ul>
     </div>
   </div>
+</div>
 
-  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
-
-</body>
 
 <script>
   $('.reAnswer').hide();
 
 
   /* 질문 수정 화면으로 이동 */
-  $('.qupdate').click(function () {
+  $('.qupdate').click(function() {
     location.href = '/answer/update?qnumber=' + $(location).attr('search').slice($(location).attr('search').indexOf('=') + 1);
   });
 
   /* 질문 삭제 */
-  $('.qdelete').click(function () {
+  $('.qdelete').click(function() {
     var del = confirm('해당 질문을 삭제하시겠습니까?');
     if (del) {
       $.ajax({
@@ -215,7 +163,7 @@
           qnumber: $(location).attr('search').slice($(location).attr('search').indexOf('=') + 1)
         },
         dataType: 'json',
-        success: function (result) {
+        success: function(result) {
           if (result) {
             alert('질문이 삭제되었습니다.');
             location.href = '/';
@@ -223,7 +171,7 @@
           else
             alert('문제발생');
         },
-        error: function (err) {
+        error: function(err) {
           console.log(err);
         }
       });
@@ -233,12 +181,14 @@
 
 
   /* 답변 등록 */
-  $('.submitBtn').click(function () {
+  $('.submitBtn').click(function() {
     if ('<%= email %>' == 'undefined') {
       alert('로그인이 필요한 서비스입니다.');
-    } else if ($('#answerContext').val() == '') {
+    }
+    else if ($('#answerContext').val() == '') {
       alert('내용을 입력하세요!');
-    } else {
+    }
+    else {
       $.ajax({
         url: '/addComment',
         type: 'POST',
@@ -247,7 +197,7 @@
           qnumber: $(location).attr('search').slice($(location).attr('search').indexOf('=') + 1)
         },
         dataType: 'json',
-        success: function (result) {
+        success: function(result) {
           if (result) {
             alert('답변이 등록되었습니다.');
             location.reload();
@@ -255,7 +205,7 @@
           else
             alert('문제발생');
         },
-        error: function (err) {
+        error: function(err) {
           console.log(err);
         }
       });
@@ -263,8 +213,8 @@
   });
 
   /* 답변 수정하기 textarea */
-  $('.cupdate').each(function (index) {
-    $(this).click(function () {
+  $('.cupdate').each(function(index) {
+    $(this).click(function() {
       var acontext = $(`.answer-context${$(this).attr('value')}`).text().trim();
       $(`.answer-context${$(this).attr('value')}`).html(`
       <form method="POST" action="/updateComment/<%=answer._id%>/${$(this).attr('id')}">
@@ -279,13 +229,13 @@
   });
 
   /* 답변 삭제 */
-  $('.cdelete').each(function (index) {
-    $(this).click(function () {
+  $('.cdelete').each(function(index) {
+    $(this).click(function() {
       if (confirm('해당 답변을 삭제하시겠습니까?')) {
         $.ajax({
           url: `/delComment/<%=answer._id%>/${$(this).attr('id')}`,
           type: 'DELETE',
-          success: function (params) {
+          success: function(params) {
             location.reload();
           }
         });
@@ -295,19 +245,20 @@
 
 
   /* 답변의 답변 등록 */
-  $('.recomment').each(function (index) {
-    $(this).click(function () {
+  $('.recomment').each(function(index) {
+    $(this).click(function() {
       if ('<%= email %>' == 'undefined') {
         alert('로그인이 필요한 서비스입니다.');
-      } else {
+      }
+      else {
         $(`.reAnswer${index}`).show();
       }
     });
   });
 
   /* 답변의 답변 수정하기 textarea */
-  $('.rupdate').each(function (index) {
-    $(this).click(function () {
+  $('.rupdate').each(function(index) {
+    $(this).click(function() {
       var acontext = $(`.reanswer-context${$(this).attr('value')}`).text().trim();
       console.log(index, $(this).attr('value'));
       $(`.reanswer-context${$(this).attr('value')}`).html(`
@@ -323,20 +274,17 @@
   });
 
   /* 답변의 답변 삭제 */
-  $('.rdelete').each(function (index) {
-    $(this).click(function () {
+  $('.rdelete').each(function(index) {
+    $(this).click(function() {
       if (confirm('해당 답변을 삭제하시겠습니까?')) {
         $.ajax({
           url: `/delReComment/<%=answer._id%>/${$(this).attr('id')}`,
           type: 'DELETE',
-          success: function (params) {
+          success: function(params) {
             location.reload();
           }
         });
       }
     });
   });
-
 </script>
-
-</html>
